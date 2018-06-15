@@ -1,23 +1,40 @@
 require 'rails_helper'
 
 RSpec.describe "Users", type: :request do
+
+  # Return a copy of the given hash with its
+  # DateTime objects correctly formatted for
+  # sending as JSON strings, including the
+  # microsecond data.
+  def format_dates_for_json(hash)
+    hash.transform_values do |v|
+      if v.is_a?(ActiveSupport::TimeWithZone)
+        v.strftime('%Y-%m-%d %H:%M:%S.%6N')
+      else
+        v
+      end
+    end
+  end
+
+
   let!(:users) { create_list(:user, 10) }
   let!(:valid_attributes) {
     build(:user).attributes
       .except("id", "created_at", "updated_at")
       .symbolize_keys
   }
+  let!(:json_params) { format_dates_for_json(valid_attributes) }
 
 
   describe "POST /users" do
     context "when the request is valid" do
-      before { post "/users", params: valid_attributes }
+      before do
+        post "/users", params: json_params
+      end
 
       it "creates a user" do
         expected_data = valid_attributes
         actual_data   = User.find(json['id'])
-
-        binding.pry
 
         expect(actual_data).to have_attributes(expected_data)
       end
