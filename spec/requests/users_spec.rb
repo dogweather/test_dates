@@ -8,7 +8,7 @@ RSpec.describe "Users", type: :request do
   # microsecond data.
   def format_dates_for_json(hash)
     hash.transform_values do |v|
-      if v.is_a?(ActiveSupport::TimeWithZone)
+      if v.respond_to?(:strftime)
         v.strftime('%Y-%m-%d %H:%M:%S.%6N')
       else
         v
