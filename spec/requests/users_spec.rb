@@ -48,7 +48,7 @@ RSpec.describe "Users", type: :request do
 
   describe "PUT /users/:id" do
     context "when the record exists" do
-      before { put "/users/#{User.last.id}", params: valid_attributes }
+      before { put "/users/#{User.last.id}", params: json_params }
 
       it "updates the record" do
         expect(response.body).to be_empty
