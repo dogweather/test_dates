@@ -35,6 +35,8 @@ group :development, :test do
   gem "faker"
   gem "rspec-rails"
   gem "database_cleaner"
+  gem "pry"
+  gem "pry-rails"
 end
 
 group :development do

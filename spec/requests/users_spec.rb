@@ -8,12 +8,18 @@ RSpec.describe "Users", type: :request do
       .symbolize_keys
   }
 
+
   describe "POST /users" do
     context "when the request is valid" do
       before { post "/users", params: valid_attributes }
 
       it "creates a user" do
-        expect(json.except("id", "created_at", "updated_at")).to eq(valid_attributes.stringify_keys)
+        expected_data = valid_attributes
+        actual_data   = User.find(json['id'])
+
+        binding.pry
+
+        expect(actual_data).to have_attributes(expected_data)
       end
 
       it "returns status code 201" do
@@ -21,6 +27,7 @@ RSpec.describe "Users", type: :request do
       end
     end
   end
+
 
   describe "PUT /users/:id" do
     context "when the record exists" do
